@@ -4,17 +4,16 @@
 #include "data.h"
 
 
-
 EdgeType matchType(char* str){
-    if (strcmp(str, "EUC_2D")){
+    if (!strcmp(str, "EUC_2D")){
         printf("test EUC_2D\n");
         return EUC_2D;
     }
-    else if (strcmp(str, "ATT")){
+    else if (!strcmp(str, "ATT")){
         printf("test ATT\n");
         return ATT;
     }
-    else if (strcmp(str, "GEO")){
+    else if (!strcmp(str, "GEO")){
         printf("test GEO\n");
         return GEO;
     }
@@ -100,31 +99,38 @@ void readTSP(char* nomFischier, FischierTSP* tsp){
     fclose(f); 
 }
 
-void readTour(FILE* f, FischierTour* tour);
+void readTour(FILE* f, FischierTour* tour) {
+    char buffer[128];
 
-int main(void){
-    FischierTSP* f;
-    char* name = "../JDD/ALL_tsp/gr96.tsp";
-    readTSP(name, f);
-    if (f->edge_type==ATT){
-        printf("ATT\n");
-        for (int i = 0; i< f->dimension; i++){
-        printf("%d %d %d\n", f->nodes[i].numero, f->nodes[i].coord.att.x, f->nodes[i].coord.att.y);
+    while (fgets(buffer, sizeof(buffer), f)) {
+        if (strncmp(buffer, "NAME", 4) == 0) {
+            sscanf(buffer, "NAME : %63s", tour->name);
+        }
+        else if (strncmp(buffer, "DIMENSION", 9) == 0) {
+            sscanf(buffer, "DIMENSION : %d", &tour->dimension);
+
+            tour->nodes = malloc(tour->dimension * sizeof(int));
+            if (!tour->nodes) {
+                fprintf(stderr, "Erreur: impossible d'allouer la mémoire pour TOUR.\n");
+                exit(1);
+            }
+        }
+        else if (strncmp(buffer, "TOUR_SECTION", 12) == 0) {
+            int idx = 0;
+            int node;
+
+            while (fscanf(f, "%d", &node) == 1) {
+                if (node == -1) 
+                    break; 
+
+                if (idx < tour->dimension) {
+                    tour->nodes[idx++] = node;
+                } else {
+                    fprintf(stderr, "Erreur: plus de noeuds que la dimension annoncée (%d).\n", tour->dimension);
+                    exit(1);
+                }
+            }
         }
     }
-    else if (f->edge_type==EUC_2D){
-        printf("EUC_2D\n");
-        for (int i = 0; i< f->dimension; i++){
-        printf("%d %f %f\n", f->nodes[i].numero, f->nodes[i].coord.euc.x, f->nodes[i].coord.euc.y);
-        }
-    }
-    else if (f->edge_type==GEO){
-        printf("GEO\n");
-        for (int i = 0; i< f->dimension; i++){
-        printf("%d %f %f\n", f->nodes[i].numero, f->nodes[i].coord.geo.lt, f->nodes[i].coord.geo.lgt);
-        }
-    }
-    
-    printf("fin\n");
-    return 0;
 }
+
