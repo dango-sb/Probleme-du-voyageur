@@ -29,7 +29,7 @@ typedef struct {
     int dimension;          // DIMENSION
     EdgeType edge_type;    // EDGE_WEIGHT_TYPE
     Node* nodes;           // NODE_COORD_SECTION
-} FischierTSP;
+} FichierTSP;
 
 /*
 TYPE: TOUR
@@ -39,7 +39,7 @@ typedef struct{
     char name[64];
     int dimension;
     int* nodes;         // TOUR_SECTION
-} FischierTour;
+} FichierTour;
 
 /*
 TYPE: TSP
@@ -55,11 +55,11 @@ typedef struct {
     int dimension;          // DIMENSION
     EdgeFormat format;      // EDGE_WEIGHT_FORMAT
     int* weights;           // EDGE_WEIGHT_SECTION
-} FischierExplicit;
+} FichierExplicit;
 
 
-void readTSP(char* nomFischier, FischierTSP* tsp);
-void readTour(FILE* f, FischierTour* tour);
+void readTSP(char* nomFischier, FichierTSP* tsp);
+void readTour(FILE* f, FichierTour* tour);
 
 EdgeType matchType(char* str);
 

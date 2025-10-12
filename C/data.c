@@ -24,8 +24,8 @@ EdgeType matchType(char* str){
 }
 
 
-void readTSP(char* nomFischier, FischierTSP* tsp){   
-    FILE *f = fopen(nomFischier, "r");  
+void readTSP(char* nomFichier, FichierTSP* tsp){   
+    FILE *f = fopen(nomFichier, "r");  
     if(f == NULL) {
         perror("Erreur lors de l'ouverture du fischier.\n");
         return;
@@ -99,7 +99,7 @@ void readTSP(char* nomFischier, FischierTSP* tsp){
     fclose(f); 
 }
 
-void readTour(FILE* f, FischierTour* tour) {
+void readTour(FILE* f, FichierTour* tour) {
     char buffer[128];
 
     while (fgets(buffer, sizeof(buffer), f)) {
@@ -134,3 +134,22 @@ void readTour(FILE* f, FischierTour* tour) {
     }
 }
 
+int **demie_matrice(FichierTsp *fichier,int (*dist)(Node,Node)){
+    int n=fichier->dimension;
+    int **M=(int **)malloc(n*sizeof(int *));
+    if(M==NULL){
+        fprintf(stderr,"erreur allocation de mémoire pour la matrice");
+        exit(1);
+    }
+    for(int i=0;i<n;i++){
+        M[i]=(int*)malloc(i*sizeof(int));
+        if(M[i]==NULL){
+         fprintf(stderr,"erreur allocation de mémoire pour la matrice");
+            exit(1);
+        }
+        for(int j=0;j<i;j++){
+            M[i][j]=dist(fichier->nodes[i],fichier->nodes[j]);
+        }
+    }
+    return M;
+}
