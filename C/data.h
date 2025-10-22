@@ -60,7 +60,7 @@ typedef struct {
 
 void readTSP(char* nomFischier, FichierTSP* tsp);
 void readTour(FILE* f, FichierTour* tour);
-
 EdgeType matchType(char* str);
+char* typeToChar(EdgeType edge);
 
 #endif // DATA_H

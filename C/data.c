@@ -6,15 +6,12 @@
 
 EdgeType matchType(char* str){
     if (!strcmp(str, "EUC_2D")){
-        printf("test EUC_2D\n");
         return EUC_2D;
     }
     else if (!strcmp(str, "ATT")){
-        printf("test ATT\n");
         return ATT;
     }
     else if (!strcmp(str, "GEO")){
-        printf("test GEO\n");
         return GEO;
     }
     else {        
@@ -22,6 +19,23 @@ EdgeType matchType(char* str){
         exit(1);
     }
 }
+
+char* typeToChar(EdgeType edge){
+    if (edge == EUC_2D){
+        return "EUC_2D";
+    }
+    else if (edge == ATT){
+        return "ATT";
+    }
+    else if (edge == GEO){
+        return "GEO";
+    }
+    else{
+        perror("Erreur lors de la correspondance des types.\n");
+        exit(1);
+    }
+}
+
 
 
 void readTSP(char* nomFichier, FichierTSP* tsp){   
