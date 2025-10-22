@@ -2,6 +2,8 @@
 #define FORCE_BRUTE_H
 
 #include <stdio.h>
+#include "data.h"
+#include "fonctions_calcul.h"
 
 
 void handler_signal(int sig);

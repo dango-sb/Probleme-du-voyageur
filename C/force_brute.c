@@ -6,7 +6,7 @@
 #include <signal.h>
 #include "force_brute.h"
 #include "data.h"
-#include "fonction_calcul.h"
+#include "fonctions_calcul.h"
 
 
 /* Drapeau global pour intercepter Ctrl-C */
@@ -100,14 +100,14 @@ void force_brute(FichierTSP *tsp, EdgeType type){
     
     printf("Meilleur tour longueur %d :\n",best_len);
     printf("[");
-    for(int p=0,p<tour_best->dimension-1,p++){
+    for(int p=0;p<tour_best->dimension-1;p++){
         printf("%d, ",tour_best->nodes[p]);
     }
     printf("%d]\n",tour_best->nodes[tour_best->dimension-1]);
 
     printf("Pire tour longueur %d :\n",worst_len);
     printf("[");
-    for(int p=0,p<tour_worst->dimension-1,p++){
+    for(int p=0;p<tour_worst->dimension-1;p++){
         printf("%d, ",tour_worst->nodes[p]);
     }
     printf("%d]\n",tour_worst->nodes[tour_worst->dimension-1]);
