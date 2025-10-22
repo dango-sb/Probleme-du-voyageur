@@ -19,7 +19,7 @@ int main(int argc, char* argv[]){
 
     FichierTSP* tsp = malloc(sizeof(FichierTSP));
     readTSP(path,tsp);
-    printf("Instance ; algo ; long (C) ; long (Python) ; temps ; tour ; valid ; mêmes longueurs");
+    //printf("Instance ; algo ; long (C) ; long (Python) ; temps ; tour ; valid ; mêmes longueurs");
     char *instance = tsp->name;
     char *algo = "cannonical";
     long long_C;
