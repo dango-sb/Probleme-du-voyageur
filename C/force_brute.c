@@ -58,7 +58,7 @@ void permuter(int *perm, int debut, int fin,FichierTSP *tsp, FichierTour *tour_a
 }
 
 
-void force_brute(FichierTSP *tsp, EdgeType type){
+FichierTour* force_brute(FichierTSP *tsp, EdgeType type){
     signal(SIGINT, handler_signal);
 
     int n = tsp->dimension;
@@ -92,7 +92,7 @@ void force_brute(FichierTSP *tsp, EdgeType type){
         if (rep == 'o' || rep == 'O') {
             interrompre = 0;
             force_brute(tsp, type); 
-            return;
+            return NULL;
         } else {
             printf("Arrêt demandé.\n");
         }
@@ -111,13 +111,13 @@ void force_brute(FichierTSP *tsp, EdgeType type){
         printf("%d, ",tour_worst->nodes[p]);
     }
     printf("%d]\n",tour_worst->nodes[tour_worst->dimension-1]);
-
+    return tour_best;
 
     free(tour_actuel->nodes);
-    free(tour_best->nodes);
+    //free(tour_best->nodes);
     free(tour_worst->nodes);
     free(tour_actuel);
-    free(tour_best);
+    //free(tour_best);
     free(tour_worst);
 }
 
