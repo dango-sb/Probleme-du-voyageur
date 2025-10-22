@@ -134,7 +134,7 @@ void readTour(FILE* f, FichierTour* tour) {
     }
 }
 
-int **demie_matrice(FichierTsp *fichier,int (*dist)(Node,Node)){
+int **demie_matrice(FichierTSP *fichier,int (*dist)(Node,Node)){
     int n=fichier->dimension;
     int **M=(int **)malloc(n*sizeof(int *));
     if(M==NULL){
