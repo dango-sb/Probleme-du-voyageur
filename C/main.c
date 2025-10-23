@@ -7,7 +7,7 @@
 #include "data.h"
 #include "fonctions_calcul.h"
 #include "force_brute.h"
-#include "Demi matrice.h"
+#include "demi_matrice.h"
 
 int main(int argc, char* argv[]){
     clock_t start, end;
