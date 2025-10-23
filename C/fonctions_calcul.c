@@ -54,22 +54,11 @@ int distance_geo(Node node1, Node node2){
 }
 
 
- int longueur_tournee(FichierTSP * tsp, FichierTour * tour, EdgeType type){
+int longueur_tournee(FichierTSP * tsp, FichierTour * tour, int (*distance)(Node,Node)){
+
     if(tsp->dimension < tour->dimension){
         fprintf(stderr, "fichier tour et fichier tsp non compatible");
         exit(1);
-    }
-    int (*distance)(Node,Node);
-    switch(type){
-        case EUC_2D:
-            distance = distance_euc_2d;
-            break;
-        case ATT:
-            distance = distance_att;
-            break;
-        case GEO:
-            distance = distance_geo;
-            break;
     }
     int longueur = 0;
     int indice1;
@@ -85,3 +74,14 @@ int distance_geo(Node node1, Node node2){
 
     return longueur;
 }
+
+
+
+
+
+
+
+
+
+
+
