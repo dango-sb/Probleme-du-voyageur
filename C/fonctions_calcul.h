@@ -8,7 +8,7 @@ int distance_att(Node node1, Node node2);
 
 int distance_geo(Node node1, Node node2);
 
-int longueur_tournee(FichierTSP * tsp, FichierTour * tour, EdgeType type);
+int longueur_tournee(FichierTSP * tsp, FichierTour * tour, int (*distance)(Node ,Node));
 
 
 #endif
