@@ -13,12 +13,12 @@ int main(int argc, char* argv[]){
     clock_t start, end;
     
     if(argc!=2){
-        printf("Usage: %s [nom_fichier_tsp]\n", argv[0]);
+        printf("Usage: %s fichier.tsp\n", argv[0]);
         exit(0);
     }
 
     char path[256];
-    snprintf(path, sizeof(path), "../JDD/ALL_tsp/%s.tsp", argv[1]);
+    snprintf(path, sizeof(path), "../JDD/ALL_tsp/%s", argv[1]);
 
     FichierTSP* tsp = malloc(sizeof(FichierTSP));
     readTSP(path,tsp);
