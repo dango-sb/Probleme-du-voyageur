@@ -35,7 +35,20 @@ int main(int argc, char* argv[]){
 
     temps_cpu = ((double)(end - start)) / CLOCKS_PER_SEC;   
     
-    longueur = longueur_tournee(tsp, tour, tsp->edge_type);
+    int (*distance)(Node,Node);
+    switch(tsp->edge_type){
+        case EUC_2D:
+            distance = distance_euc_2d;
+            break;
+        case ATT:
+            distance = distance_att;
+            break;
+        case GEO:
+            distance = distance_geo;
+            break;
+    }
+
+    longueur = longueur_tournee(tsp, tour, distance);
     printf("Instance ; Méthode ; Temps CPU (sec) ; Longueur ; Tour\n");
     printf("%s.tsp ; %s ; %lf ; %d ; [", argv[1], methode, temps_cpu, longueur);
 
