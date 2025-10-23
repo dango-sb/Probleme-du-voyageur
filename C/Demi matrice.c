@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "Demi matrice.h"
+#include "demi_matrice.h"
 #include "data.h"
 
 
