@@ -76,7 +76,13 @@ FichierTour* force_brute(FichierTSP *tsp, EdgeType type){
     tour_best->nodes   = malloc(sizeof(int) * (n + 1));
     tour_worst->nodes  = malloc(sizeof(int) * (n + 1));
 
-    int best_len = 0;
+    for (int i = 0; i<n;i++){
+        tour_best->nodes[i] = i;
+    }
+
+    tour_best->nodes[n] = -1;
+
+    int best_len = longueur_tournee(tsp, tour_best, type);
     int worst_len = 0;
 
     printf("Lancement de l’algorithme de force brute sur %d villes...\n", n);
