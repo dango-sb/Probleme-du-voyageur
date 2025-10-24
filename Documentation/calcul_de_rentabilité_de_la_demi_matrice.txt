@@ -1,0 +1,61 @@
+Soit un TSP nommé TSP(n) avec n points notés P(1),P(2),...,P(n-1),P(n)
+
+Le nombre de distance à calculer pour obtenir la distance d'un tour est de n. (preuve en bas de documents)
+
+Afin de calculer toutes les distances d'une demi-matrice, nous réalisons : n calculs pour le point 1, n-1 pour le point 2, n-2 pour le point 3 ,..., 1 calcul pour le point n.
+Cela représente donc 1+2+...+(n-1)+n = n(n-1)/2 calculs O(n²)
+
+
+QUAND UTILISER UNE DEMI-MATRICE DES DISTANCES AFIN D'OPTIMISER LE NOMBRE DE CALCUL DE DISTANCE:
+
+Pour un TSP avec n points, il est donc intéressant d'utiliser une matrice lorsque celle-ci compte environ n² / n soit n tours.
+
+Pour être plus précis, (n(n-1)/2)/n = (n-1)/2 tours.
+
+
+
+Pour l'algorithme de force brute, il est donc très intéressant d'utiliser une demi-matrice. En effet, celui-ci calcule n! tours, donc réaliser n!*n = n²(n-1)! calculs de distance.
+
+
+
+
+
+    - PREUVE :
+
+Tout tour doit passer par tous les points 1 seule fois et revenir à son point d'origine.
+En conséquence, tous les tours possibles d'un problème P font la même longueur.
+
+Soit un tour P canonique, qui passe par tous les points dans le sens de leur numérotation : P(1) -> P(2) -> P(3) -> ... -> P(n-1) -> P(n) -> P(1)
+
+
+Nous allons montrer que pour calculer la distance jusqu'au point n nous devons effectuer n-1 calcul.
+
+
+
+INITIALISATION:
+
+Soit un TSP(2) avec deux points. Nous devons calculer 1 distance P(1)->P(2)
+Donc TSP(2) = 1 calcul (où -> représente un calcul)
+
+HÉRÉDITÉ:
+
+Supposons la propriété vraie au rang k
+
+TSP(k) = k-1 calcul
+
+=> P(1)->P(2)->...->P(k) = k-1
+
+si nous ajoutons un point P(k+1) alors nous rajoutons un calcul  P(k) -> P(k+1)
+
+=> P(1)->P(2)->...->P(k) -> P(k+1) = k
+
+donc la propriété est vérifiée au rang k
+
+CONCLUSION :
+
+Pour tout entier naturel, pour calculer la distance jusqu'au point n nous devons effectuer n-1 calculs.
+
+
+Pour calculer un tour nous devons ainsi calculer jusqu'au point n puis calculer P(n) -> P(1)  . Nous devons par conséquence faire (n-1) calculs plus 1 donc n calculs.
+
+
