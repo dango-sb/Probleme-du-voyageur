@@ -135,7 +135,10 @@ void readTour(FILE* f, FichierTour* tour) {
 
             while (fscanf(f, "%d", &node) == 1) {
                 if (node == -1) 
+                {
+                    tour->nodes[idx++] = node;
                     break; 
+                }
 
                 if (idx < tour->dimension) {
                     tour->nodes[idx++] = node;

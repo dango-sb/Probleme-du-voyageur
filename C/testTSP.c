@@ -8,16 +8,16 @@
 int main(int argc, char* argv[]) {
     
     if (argc < 2) {
-       tspprintf(stderr, "Usage: %s <filename>\n", argv[0]);
+        printf("Usage: %s filename.tsp\n", argv[0]);
         return 1;
     }
 
     char path[256];
-    snprintf(path, sizeof(path), "../JDD/ALL_tsp/%s.tsp", argv[1]);
+    snprintf(path, sizeof(path), "../JDD/ALL_tsp/%s", argv[1]);
 
-    FischierTSP* tsp;
+    FichierTSP  *tsp  = malloc(sizeof(FichierTSP));
     readTSP(path,tsp);
-    printf("Tour name: %s\n",tsp->name);
+    printf("Name: %s\n",tsp->name);
     printf("Dimension: %d\n",tsp->dimension);
     if (tsp->edge_type==ATT){
         printf("EDGE_WEIGHT_TYPE: ATT\n");
