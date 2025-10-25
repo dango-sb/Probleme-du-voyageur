@@ -17,9 +17,11 @@ int main(int argc, char* argv[]){
         exit(0);
     }
 
-
+    char path[256];
+    snprintf(path, sizeof(path), "../JDD/ALL_tsp/%s", argv[1]);
+    
     FichierTSP* tsp = malloc(sizeof(FichierTSP));
-    readTSP(argv[1],tsp);
+    readTSP(path,tsp);
     char *methode = "cannonical";
     double temps_cpu;
     int longueur;
