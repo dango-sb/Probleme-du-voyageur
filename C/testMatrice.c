@@ -14,7 +14,7 @@ int main(int argc, char *argv[]){
     }
 
     char path[256];
-    snprintf(path, sizeof(path), "../JDD/ALL_tsp/%s", argv[2]);
+    snprintf(path, sizeof(path), "../JDD/ALL_tsp/%s", argv[1]);
     
     FichierTSP  *tsp  = malloc(sizeof(FichierTSP));
     readTSP(path, tsp);
