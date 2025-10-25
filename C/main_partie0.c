@@ -14,10 +14,12 @@ int main(int argc, char * argv[]){
 
     //création et initialisation du fichiers tour canonique et tsp
 
+    char path[256];
+    snprintf(path, sizeof(path), "../JDD/ALL_tsp/%s", argv[2]);
 
     FichierTour *tour = malloc(sizeof(FichierTour));
     FichierTSP  *tsp  = malloc(sizeof(FichierTSP));
-    readTSP(argv[2], tsp);
+    readTSP(path, tsp);
 
     strcpy(tour->name,tsp->name);
     tour->dimension = tsp->dimension;
