@@ -8,7 +8,7 @@
 
 int main(int argc, char * argv[]){
     if (argc != 4 || (strcmp(argv[1],"-f")!=0) || (strcmp(argv[3],"-c")!=0)){
-        fprintf(stderr, "Usage : %s -f fichier -c\n", argv[0]);
+        fprintf(stderr, "Usage : %s -f fichier.tsp -c\n", argv[0]);
         exit(1);
     }
 
