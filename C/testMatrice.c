@@ -13,8 +13,11 @@ int main(int argc, char *argv[]){
         exit(1);
     }
 
+    char path[256];
+    snprintf(path, sizeof(path), "../JDD/ALL_tsp/%s", argv[2]);
+    
     FichierTSP  *tsp  = malloc(sizeof(FichierTSP));
-    readTSP(argv[1], tsp);
+    readTSP(path, tsp);
 
     int (*distance)(Node,Node);
 
