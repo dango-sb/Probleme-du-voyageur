@@ -4,11 +4,7 @@
 #include "data.h"
 #include "fonctions_calcul.h"
 
-void echanger(int *a, int *b) {
-    int tmp = *a;
-    *a = *b;
-    *b = tmp;
-}
+
 
 FichierTour* random_walk(FichierTSP* tsp){
     FichierTour * tour = malloc(sizeof(FichierTour));
@@ -33,11 +29,11 @@ FichierTour* random_walk(FichierTSP* tsp){
     for(int i=0;i<tsp->dimension;i++){
         random=rand()%(tsp->dimension-i)+i;
         printf("%d ",random);
-        tsp->nodes[i]=random;
+        tour->nodes[i]=random;
     }
     printf("\n");
-    tsp->nodes[tsp->dimension]=-1;
+    tour->nodes[tsp->dimension]=-1;
     printf("Longeur tournée random: %d",longueur_tournee(tsp,tour,distance));
-    return tsp;
+    return tour;
 }
 
