@@ -4,7 +4,14 @@
 #include "data.h"
 #include "fonctions_calcul.h"
 
-
+bool contains(int tab[], int taille, int valeur) {
+    for (int i = 0; i < taille; i++) {
+        if (tab[i] == valeur) {
+            return true;
+        }
+    }
+    return false;
+}
 
 FichierTour* random_walk(FichierTSP* tsp){
     FichierTour * tour = malloc(sizeof(FichierTour));
@@ -26,10 +33,15 @@ FichierTour* random_walk(FichierTSP* tsp){
     int random;
     printf("Lancement random_walk :\n");
     printf("Tournée :\n");
-    for(int i=0;i<tsp->dimension;i++){
+    int nombres[tsp->dimension];
+    int i=0;
+    while(i<tsp->dimension){
         random=rand()%(tsp->dimension-i)+i;
-        printf("%d ",random);
-        tour->nodes[i]=random;
+        if(!contains(nombres,i,random)){
+            printf("%d ",random);
+            tour->nodes[i]=random;
+            i++;
+    }
     }
     printf("\n");
     tour->nodes[tsp->dimension]=-1;
