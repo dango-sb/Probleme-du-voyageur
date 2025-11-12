@@ -20,7 +20,7 @@ void two_opt(FichierTSP *tsp, FichierTour *tour, int (*distance)(Node, Node)) {
         improved = 0;
 
         for (int i = 1; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
+            for (int j = i + 1; j < n - 1; j++) {
 
                 int p1 = tour->nodes[i - 1];
                 int p2 = tour->nodes[i];

@@ -6,7 +6,7 @@
 #include "fonctions_calcul.h"
 #include "demi_matrice.h"
 #include "plus_proche_voisin.h"
-// #include "random_walk.h"
+#include "random_walk.h"
 #include "2opt.h"
 
 int main(int argc, char *argv[]) {
@@ -30,10 +30,10 @@ int main(int argc, char *argv[]) {
         printf("Méthode : plus proche voisin\n");
         tour = plus_proche_voisin(tsp);
     } 
-    // else if (strcmp(argv[2], "random") == 0) {
-        // printf("Méthode : random walk\n");
-        // tour = random_walk(tsp);
-    // } 
+    else if (strcmp(argv[2], "random") == 0) {
+        printf("Méthode : random walk\n");
+        tour = random_walk(tsp);
+    } 
     else {
         fprintf(stderr, "Option algo invalide\n");
         free(tsp);
