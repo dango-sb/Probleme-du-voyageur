@@ -31,21 +31,17 @@ FichierTour* random_walk(FichierTSP* tsp){
             break;
     }
     int random;
-    printf("Lancement random_walk :\n");
-    printf("Tournée :\n");
     int nombres[tsp->dimension];
     int i=0;
     while(i<tsp->dimension){
         random=rand()%(tsp->dimension-i)+i;
         if(!contains(nombres,i,random)){
-            printf("%d ",random);
             tour->nodes[i]=random;
             i++;
     }
     }
-    printf("\n");
     tour->nodes[tsp->dimension]=-1;
-    printf("Longeur tournée random: %d",longueur_tournee(tsp,tour,distance));
+    
     return tour;
 }
 
