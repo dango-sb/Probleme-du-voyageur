@@ -3,23 +3,15 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stddef.h>
-#include <signal.h>
 #include "data.h"
 #include "fonctions_calcul.h"
-#include "random_walk.h"
 #include "tsp_ga_fct_.h"
-#include "tsp_tools.h"
+#include "fonctions_python.h"
 
 #define population_size=30
 #define generations=1000
 #define mutation_rate=0.10
 #define tournament_size=int(0.5*population_size)
-#define cities
-
-#define coord
-#define edge_type 
-
-#define distance_fct,graphique
 
 int main(int argc, char *argv[]){
     char path[256];
@@ -30,33 +22,45 @@ int main(int argc, char *argv[]){
         return 1;
     }
     readTSP(path, tsp);
-    FichierTour* population = random_walk(tsp);
-    best_individual = population->nodes[0];
-    for(int i=0; i<generations;i++){
-  /*      selected = tournament_selection(population, calcul_tournee(), tournament_size,distance_fct, coord)
-        offspring = []
-        for i in range(0, population_size, 2):
-            child_a = ordered_crossover(selected[i], selected[i + 1])
-            child_b = ordered_crossover(selected[i + 1], selected[i])
-            offspring.append(child_a)
-            offspring.append(child_b)
-
-        for child in offspring:
-            swap_mutation(child, mutation_rate)
-        offspring = sorted(offspring, key=lambda indiv: fitness(indiv,distance_fct, coord)) # on trie
-        population = offspring
-        worste = max(population,key=lambda indiv: fitness(indiv,distance_fct,coord)) # la pire
-        ind = population.index(worste)
-        population[ind] = random.sample(cities, len(cities)) # on la remplace par du neuf
-        best_generation = min(population, key=lambda indiv:fitness(indiv,distance_fct, coord)) #la meilleure
-        worste_generation = max(population,key=lambda indiv: fitness(indiv,distance_fct,coord)) # la pire le retour
-        ind = population.index(worste_generation)
-        if fitness(best_generation,distance_fct, coord) < fitness(best_individual,distance_fct, coord): # mémoire générationnelle
-            best_individual = best_generation
-        population[ind] = best_individual # on le remet dans la piscine*/
+    FichierTour* population[population_size]=random_population(population_size,tsp);
+    int (*distance)(Node,Node);
+    switch(tsp->edge_type){
+        case EUC_2D:
+            distance = distance_euc_2d;
+            break;
+        case ATT:
+            distance = distance_att;
+            break;
+        case GEO:
+            distance = distance_geo;
+            break;
     }
-   // print_solution(best_individual,fitness,distance_fct,coord,file,instance,graphique)
-
-
+    FichierTour* best_individual = population->nodes[0];
+    for(int i=0; i<generations;i++){
+        FichierTour* selected[tournament_size] = tournament_selection(population, calcul_tournee(), tournament_size,distance_fct, coord)
+        FichierTour* offspring[population_size];
+        for(int j=0;j<population_size;j+=2){
+            FichierTour* child_a = ordered_crossover(selected[j], selected[j + 1])
+            FichierTour child_b = ordered_crossover(selected[j + 1], selected[j])
+            offspring[j]=child_a;
+            offspring[j+1]=child_b;
+        }
+        for(int n=0;n<population_size;i++){
+            swap_mutation(offspring[n], mutation_rate);
+        }
+        offspring = sorted(offspring,population_size,tsp,distance);
+        population = offspring;
+        FichierTour* worst= max(population,population_size,tsp,distance);
+        int ind = index(population,worst,population_size);
+        population[ind] = random_walk(tsp);
+        FichierTour* best_generation = min(population,population_size,tsp,distance);
+        FichierTour* worst_generation = max(population,population_size,tsp,distance);
+        ind = index(population,worst_generation,population_size);
+        if(longueur_tournee(tsp,best_generation,distance)<longueur_tournee(tsp,best_individual,distance)){
+            best_individual = best_generation;
+        }
+        population[ind] = best_individual
+    }
+    print_solution(best_individual,tsp,distance);
     return 0;
 }
