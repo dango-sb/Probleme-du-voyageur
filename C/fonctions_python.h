@@ -11,4 +11,6 @@ FichierTour* min(FichierTour** population,int population_size,FichierTSP* tsp,in
 FichierTour* max(FichierTour** population,int population_size,FichierTSP* tsp,int (*distance)(Node ,Node));
 void sorted(FichierTour** tours,int taille,FichierTSP *tsp,int (*distance)(Node, Node));
 int index(FichierTour** population,FichierTour* tour,int population_size);
+bool equal_tour(FichierTour* tour1,FichierTour* tour2);
+
 #endif

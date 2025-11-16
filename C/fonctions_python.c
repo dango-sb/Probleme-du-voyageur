@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include "data.h"
 #include "random_walk.h"
 #include "fonctions_calcul.h"
 
 FichierTour** sample(int tournament_size,FichierTour** population,int population_size){
-    static FichierTour* sample[tournament_size];
+    FichierTour** sample = (FichierTour**)malloc(tournament_size * sizeof(FichierTour*));
     int tab[tournament_size];
     int i=0;
     while(i<tournament_size){
@@ -43,13 +44,13 @@ FichierTour* max(FichierTour** population,int population_size,FichierTSP* tsp,in
 
 
 void sorted(FichierTour** tours,int taille,FichierTSP *tsp,int (*distance)(Node, Node)){
-    for (int i = 1; i < count; i++) {
+    for (int i = 1; i < taille; i++) {
 
         FichierTour* key = tours[i];  // copie locale
         int key_len = longueur_tournee(tsp, key, distance);
 
         int j = i - 1;
-        while (j >= 0 &&longueur_tournee(tsp, &tours[j], distance) > key_len) {
+        while (j >= 0 &&longueur_tournee(tsp, tours[j], distance) > key_len) {
             tours[j + 1] = tours[j];
             j--;
         }
@@ -57,7 +58,16 @@ void sorted(FichierTour** tours,int taille,FichierTSP *tsp,int (*distance)(Node,
     }
 }
 
-int index(FichierTour** population,FichierTour* tour,int population_size){
+bool equal_tour(FichierTour* tour1,FichierTour* tour2){
+    for(int i=0;i<tour1->dimension;i++){
+        if(tour1->nodes[i]!=tour2->nodes[i]){
+            return false;
+        }
+    }
+    return true;
+}
+
+int pindex(FichierTour** population,FichierTour* tour,int population_size){
     int ind=0;
     for(int i=0;i<population_size;i++){
         if(equal_tour(population[i],tour)){
@@ -65,13 +75,4 @@ int index(FichierTour** population,FichierTour* tour,int population_size){
         }
     }
     return ind;
-}
-
-bool equal_tour(FichierTour* tour1,FichierTour* tour2){
-    for(int i=0;i<tour1->dimension){
-        if(tour1->nodes[i]!=tour2->nodes[i]){
-            return false;
-        }
-    }
-    return true;
 }
