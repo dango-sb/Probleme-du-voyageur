@@ -2,6 +2,7 @@
 #include<string.h>
 #include<stdlib.h>
 #include <stdbool.h>
+#include <time.h>
 #include "data.h"
 #include "fonctions_calcul.h"
 
@@ -15,6 +16,7 @@ bool contains(int tab[], int taille, int valeur) {
 }
 
 FichierTour* random_walk(FichierTSP* tsp){
+    srand( time( NULL ) );
     FichierTour * tour = malloc(sizeof(FichierTour));
     strcpy(tour->name,tsp->name);
     tour->dimension = tsp->dimension;
