@@ -35,9 +35,10 @@ FichierTour* random_walk(FichierTSP* tsp){
     int nombres[tsp->dimension];
     int i=0;
     while(i<tsp->dimension){
-        random=rand()%(tsp->dimension-i)+i;
+        random=rand()%tsp->dimension;
         if(!contains(nombres,i,random)){
             tour->nodes[i]=random;
+            nombres[i]=random;
             i++;
     }
     }
