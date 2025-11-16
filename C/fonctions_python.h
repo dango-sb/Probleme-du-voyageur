@@ -10,5 +10,5 @@ FichierTour** sample(int tournament_size,FichierTour** population,int population
 FichierTour* min(FichierTour** population,int population_size,FichierTSP* tsp,int (*distance)(Node ,Node));
 FichierTour* max(FichierTour** population,int population_size,FichierTSP* tsp,int (*distance)(Node ,Node));
 void sorted(FichierTour** tours,int taille,FichierTSP *tsp,int (*distance)(Node, Node));
-int index(FichierTour** population,FichierTour* tour,int population_size);
+int index_tour(FichierTour** population,FichierTour* tour,int population_size);
 #endif
