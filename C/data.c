@@ -109,7 +109,6 @@ void readTSP(char* nomFichier, FichierTSP* tsp){
         }
     }
 
-    printf("Succès\n");
     fclose(f); 
 }
 

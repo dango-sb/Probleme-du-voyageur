@@ -99,13 +99,13 @@ FichierTour* force_brute(FichierTSP *tsp, EdgeType type){
     int best_len = longueur_tournee(tsp, tour_best, distance);
     int worst_len = 0;
 
-    printf("Lancement de l’algorithme de force brute sur %d villes...\n", n);
+    //printf("Lancement de l’algorithme de force brute sur %d villes...\n", n);
 
     permuter(perm, 1, n, tsp, tour_actuel, type, tour_best, &best_len, tour_worst, &worst_len,distance);
 
     if (interrompre) {
         printf("\n--- Interruption (Ctrl-C) ---\n");
-        printf("Meilleure tournée trouvée jusqu’ici (longueur %d) : ", best_len);
+        // printf("Meilleure tournée trouvée jusqu’ici (longueur %d) : ", best_len);
         for (int i = 0; i < n; i++) printf("%d ", tour_best->nodes[i] + 1);
         printf("\nSouhaitez-vous continuer (o/n) ? ");
         char rep = getchar();
@@ -118,23 +118,23 @@ FichierTour* force_brute(FichierTSP *tsp, EdgeType type){
         }
     }
     
-    printf("Meilleur tour longueur %d :\n",best_len);
-    printf("[");
-    for(int p=0;p<tour_best->dimension-1;p++){
-        printf("%d, ",tour_best->nodes[p]);
-    }
-    printf("%d]\n",tour_best->nodes[tour_best->dimension-1]);
+    // // printf("Meilleur tour longueur %d :\n",best_len);
+    // printf("[");
+    // for(int p=0;p<tour_best->dimension-1;p++){
+    //     printf("%d, ",tour_best->nodes[p]);
+    // }
+    // printf("%d]\n",tour_best->nodes[tour_best->dimension-1]);
 
-    printf("Pire tour longueur %d :\n",worst_len);
-    printf("[");
-    for(int p=0;p<tour_worst->dimension-1;p++){
-        printf("%d, ",tour_worst->nodes[p]);
-    }
-    printf("%d]\n",tour_worst->nodes[tour_worst->dimension-1]);
+    // printf("Pire tour longueur %d :\n",worst_len);
+    // printf("[");
+    // for(int p=0;p<tour_worst->dimension-1;p++){
+    //     printf("%d, ",tour_worst->nodes[p]);
+    // }
+    // printf("%d]\n",tour_worst->nodes[tour_worst->dimension-1]);
     return tour_best;
 
     free(tour_actuel->nodes);
-    //free(tour_best->nodes);
+    // free(tour_best->nodes);
     free(tour_worst->nodes);
     free(tour_actuel);
     //free(tour_best);
