@@ -45,7 +45,7 @@ int main(int argc, char *argv[]){
         free(offspring);
         offspring= malloc(population_size * sizeof(FichierTour*));
         for(int j=0;j<population_size;j+=2){
-            FichierTour* child_a = ordered_crossover(selected[j], selected[j + 1]);
+            FichierTour* child_a = ordered_crossover(selected[j], selected[j + 1]); // !!erreur!!
             FichierTour* child_b = ordered_crossover(selected[j + 1], selected[j]);
             offspring[j]=child_a;
             offspring[j+1]=child_b;
