@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
         if (i > 0) printf(",");
         printf("%d", tour->nodes[i]);
     }
-    printf("] ; ");
+    printf("] ; \n");
 
     return 0;
 }
