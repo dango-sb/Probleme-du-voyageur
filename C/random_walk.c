@@ -21,18 +21,6 @@ FichierTour* random_walk(FichierTSP* tsp){
     strcpy(tour->name,tsp->name);
     tour->dimension = tsp->dimension;
     tour->nodes = (int*)malloc((tour->dimension+1) * sizeof(int));
-    int (*distance)(Node,Node);
-    switch(tsp->edge_type){
-        case EUC_2D:
-            distance = distance_euc_2d;
-            break;
-        case ATT:
-            distance = distance_att;
-            break;
-        case GEO:
-            distance = distance_geo;
-            break;
-    }
     int random;
     int nombres[tsp->dimension];
     int i=0;
