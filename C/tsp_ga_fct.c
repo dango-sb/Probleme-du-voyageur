@@ -53,7 +53,7 @@ FichierTour* ordered_crossover(FichierTour* parent_a,FichierTour* parent_b){
         }
     }
     int tab[parent_a->dimension];
-    FichierTour* child;
+    FichierTour* child = malloc(sizeof(FichierTour));
     child->dimension=parent_a->dimension;
     for(int i=start;i<end;i++){
         child->nodes[i]=parent_a->nodes[i];
