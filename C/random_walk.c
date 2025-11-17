@@ -6,6 +6,12 @@
 #include "data.h"
 #include "fonctions_calcul.h"
 
+void echanger(int *a, int *b) {
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
 bool contains(int tab[], int taille, int valeur) {
     for (int i = 0; i < taille; i++) {
         if (tab[i] == valeur) {
