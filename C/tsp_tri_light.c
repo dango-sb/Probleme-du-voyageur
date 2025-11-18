@@ -90,7 +90,7 @@ void tournament_selection(int** population, int* fitness_values, int** selected,
 
 int main(int argc, char* argv[]) {
 
-    if(argc != 5 || (strcmp(argv[5], "ga")!= 0)) {
+    if(argc != 5) {
         printf("Usage: %s -f fichier.tsp -m ga\n", argv[0]);
         exit(0);
     }
@@ -191,8 +191,6 @@ int main(int argc, char* argv[]) {
 
     // Affichage final
     int final_distance = fitness(best_individual, dimension, tsp, distance);
-  
-
 
     printf("Tour ; ");
     printf("%s ; ", argv[2]);
@@ -206,14 +204,6 @@ int main(int argc, char* argv[]) {
         printf("%d", best_individual[i]);
     }
     printf("]; \n");
-    
-
-    // Libération mémoire
-    for (int i = 0; i < POPULATION_SIZE; i++) {
-        free(population[i]);
-        free(offspring[i]);
-        free(selected[i]);
-    }
     free(population);
     free(offspring);
     free(selected);
