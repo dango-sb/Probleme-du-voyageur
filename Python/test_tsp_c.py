@@ -71,10 +71,10 @@ def tests_instances_list(instances_file,methods):
 # Liste de paramètres.
 # opt = tsplib95.load_solution(filename+'.opt.tour') pour charger un fichier solution dans python
 #filename = "burma14.tsp"
-filename = "att48.tsp" #
-path = "../Code_C/" # adaptez à votre cas
-code = "tsp" # nom du programme C
-methods = ["-c","nn","rw","2optnn","2optrw","ga 10000 0.10 100"]#"bf","gadpx"
+filename = "../JDD/ALL_tsp/att48.tsp" #
+path = "../C/" # adaptez à votre cas
+code = "main2" # nom du programme C
+methods = ["rw", "2optrw"]#,"nn","rw","2optnn","2optrw","ga 10000 0.10 100"]#"bf","gadpx"  "bf"
 
-#test_instance(filename,methods) # pour un seul appel
-tests_instances_list("instances.txt",methods) # marche si le C marche
+test_instance(filename,methods) # pour un seul appel
+# tests_instances_list("instances.txt",methods) # marche si le C marche

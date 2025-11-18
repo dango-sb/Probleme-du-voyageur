@@ -48,7 +48,7 @@ int main(int argc, char* argv[]){
     printf("[");
     for (int i = 0; i < tour->dimension; i++) {
         if (i > 0) printf(",");
-        printf("%d", tour->nodes[i]);
+        printf("%d", tour->nodes[i]+1);
     }
     printf("] ; \n");
     

@@ -11,9 +11,11 @@
 
 int main(int argc, char *argv[]) {
     if (argc != 5) {
-        fprintf(stderr, "Usage : %s -f fichier.tsp -m [nn|rw]\n", argv[0]);
+        fprintf(stderr, "Usage : %s -f fichier.tsp -m [nn|rw|2optnn|2optrw]\n", argv[0]);
         return 1;
     }
+
+    printf("Tour ; ");
 
     char path[256];
     snprintf(path, sizeof(path), "%s", argv[2]);
@@ -80,7 +82,7 @@ int main(int argc, char *argv[]) {
     printf("[");
     for (int i = 0; i < tour->dimension; i++) {
         if (i > 0) printf(",");
-        printf("%d", tour->nodes[i]);
+        printf("%d", tour->nodes[i]+1);
     }
     printf("] ; \n");
 
