@@ -2,11 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <limits.h>
+#include <stdbool.h>
 #include "data.h"
 #include "fonctions_calcul.h"
-#define POPULATION_SIZE 30
-#define GENERATIONS 1000
-#define MUTATION_RATE 0.10
 
 // ------------------- UTILITAIRES -------------------
 
@@ -56,12 +55,136 @@ void ordered_crossover(int* parent_a, int* parent_b, int* child, int dimension) 
     child[dimension] = -1; // tour terminé par -1
 }
 
+// -----------------CROISEMENT DXP ET FONCTIONS AUXILIAIRES A CELUI CI------------------
+
+// Trouve l'indice du plus proche voisin parmi les extrémités des fragments
+int closest_fragment_end(int node, int num_fragments, int fragment_starts[], int fragment_ends[], int** fragments, int dimension, int (*distance)(Node, Node), Node* nodes) {
+    int best_idx = -1;
+    int best_dist = INT_MAX;
+    for (int f = 0; f < num_fragments; f++) {
+        int start = fragment_starts[f];
+        int end = fragment_ends[f];
+        if (start == -1) continue;
+
+        int d_start = distance(nodes[node], nodes[fragments[f][start]]);
+        if (d_start < best_dist) { best_dist = d_start; best_idx = f * 2; } // 2*f = start
+
+        int d_end = distance(nodes[node], nodes[fragments[f][end]]);
+        if (d_end < best_dist) { best_dist = d_end; best_idx = f * 2 + 1; } // 2*f+1 = end
+    }
+    return best_idx;
+}
+
+// DXP Crossover
+void dxp_crossover(int* parent_a, int* parent_b, int* child, int dimension, int (*distance)(Node, Node), Node* nodes) {
+    // 1. Copier parent A
+    for (int i = 0; i < dimension; i++) child[i] = parent_a[i];
+    child[dimension] = -1;
+
+    // 2. Détecter les arêtes non communes
+    int edges_to_remove[dimension][2]; // Liste des arêtes à enlever
+    int num_remove = 0;
+    for (int i = 0; i < dimension; i++) {
+        int next = (i + 1) % dimension;
+        int a = parent_a[i], b = parent_a[next];
+
+        // Vérifier si (a,b) ou (b,a) est présent dans parent B
+        int found = 0;
+        for (int j = 0; j < dimension; j++) {
+            int jb = (j + 1) % dimension;
+            if ((parent_b[j] == a && parent_b[jb] == b) || (parent_b[j] == b && parent_b[jb] == a)) {
+                found = 1;
+                break;
+            }
+        }
+        if (!found) {
+            edges_to_remove[num_remove][0] = a;
+            edges_to_remove[num_remove][1] = b;
+            num_remove++;
+        }
+    }
+
+    // 3. Supprimer les arêtes → créer des fragments
+    int fragment_indices[dimension];
+    for (int i = 0; i < dimension; i++) fragment_indices[i] = -1;
+
+    int num_fragments = 0;
+    int fragments[dimension][dimension]; // fragments[f][i] = node
+    int frag_sizes[dimension];
+    for (int f = 0; f < dimension; f++) frag_sizes[f] = 0;
+
+    for (int i = 0; i < dimension; i++) {
+        if (fragment_indices[i] != -1) continue;
+
+        // Créer un nouveau fragment
+        int f = num_fragments++;
+        int current = i;
+        while (fragment_indices[current] == -1) {
+            fragments[f][frag_sizes[f]] = child[current];
+            fragment_indices[current] = f;
+            frag_sizes[f]++;
+            
+            // Avancer au suivant si l'arête n'est pas à supprimer
+            int next = (current + 1) % dimension;
+            int remove = 0;
+            for (int r = 0; r < num_remove; r++) {
+                if ((child[current] == edges_to_remove[r][0] && child[next] == edges_to_remove[r][1]) ||
+                    (child[current] == edges_to_remove[r][1] && child[next] == edges_to_remove[r][0])) {
+                    remove = 1; break;
+                }
+            }
+            if (remove) break;
+            current = next;
+        }
+    }
+
+    // 4. Reconnecter les fragments par PPV
+    int assembled[dimension];
+    int assembled_size = 0;
+
+    // Commencer avec le fragment contenant le premier noeud
+    for (int i = 0; i < frag_sizes[0]; i++) assembled[assembled_size++] = fragments[0][i];
+
+    int used_fragments[dimension];
+    for (int f = 0; f < num_fragments; f++) used_fragments[f] = (f==0 ? 1 : 0);
+
+    while (assembled_size < dimension) {
+        int last_node = assembled[assembled_size - 1];
+        int best_f = -1, best_end = -1;
+        int best_dist = INT_MAX;
+
+        for (int f = 0; f < num_fragments; f++) {
+            if (used_fragments[f]) continue;
+
+            // comparer start et end du fragment
+            int start = fragments[f][0];
+            int end = fragments[f][frag_sizes[f]-1];
+            int d_start = distance(nodes[last_node], nodes[start]);
+            int d_end = distance(nodes[last_node], nodes[end]);
+
+            if (d_start < best_dist) { best_dist = d_start; best_f = f; best_end = 0; }
+            if (d_end < best_dist)   { best_dist = d_end; best_f = f; best_end = 1; }
+        }
+
+        // Ajouter le fragment sélectionné
+        if (best_end == 0) { // ordre normal
+            for (int i = 0; i < frag_sizes[best_f]; i++) assembled[assembled_size++] = fragments[best_f][i];
+        } else { // ordre inversé
+            for (int i = frag_sizes[best_f]-1; i >= 0; i--) assembled[assembled_size++] = fragments[best_f][i];
+        }
+        used_fragments[best_f] = 1;
+    }
+
+    // Copier dans child
+    for (int i = 0; i < dimension; i++) child[i] = assembled[i];
+    child[dimension] = -1;
+}
 // ------------------- MUTATION -------------------
 
-void swap_mutation(int* individual, int dimension) {
+void swap_mutation(int* individual, int dimension,double mutation_rate) {
     for (int i = 0; i < dimension; i++) {
         double r = (double)rand() / RAND_MAX;
-        if (r < MUTATION_RATE) {
+        if (r < mutation_rate) {
             int j = rand() % dimension;
             int tmp = individual[i];
             individual[i] = individual[j];
@@ -90,11 +213,26 @@ void tournament_selection(int** population, int* fitness_values, int** selected,
 
 int main(int argc, char* argv[]) {
 
-    if(argc != 5) {
-        printf("Usage: %s -f fichier.tsp -m ga\n", argv[0]);
+    if(argc <6) {
+        printf("Usage: %s -f fichier.tsp -m ga/gadxp (default ou (population_size generations mutation_rate)\n", argv[0]);
         exit(0);
     }
-
+    int POPULATION_SIZE = 30;
+    int GENERATIONS = 1000;
+    double MUTATION_RATE = 0.10;
+    bool dxp;
+   //Choix dxp ou ordered 
+   if (strcmp(argv[4], "-ga") == 0) {
+        dxp=false;
+    }else{
+        dxp=true;
+    }
+    //si choix de population_size generations et mutation_rate
+    if(argc==8){
+        POPULATION_SIZE=atoi(argv[5]);
+        GENERATIONS=atoi(argv[6]);
+        MUTATION_RATE=atof(argv[7]);
+    }
     char path[256];
     snprintf(path, sizeof(path), "%s", argv[2]);
     FichierTSP* tsp = malloc(sizeof(FichierTSP));
@@ -154,15 +292,22 @@ int main(int argc, char* argv[]) {
         // Croisement
         for (int i = 0; i < POPULATION_SIZE; i += 2) {
             if (i + 1 < POPULATION_SIZE) {
-                ordered_crossover(selected[i], selected[i+1], offspring[i], dimension);
-                ordered_crossover(selected[i+1], selected[i], offspring[i+1], dimension);
+                if(dxp){
+                    dxp_crossover(selected[i], selected[i+1], offspring[i], dimension,distance,tsp->nodes);
+                    dxp_crossover(selected[i+1], selected[i], offspring[i+1], dimension,distance,tsp->nodes);
+                }else{
+                    ordered_crossover(selected[i], selected[i+1], offspring[i], dimension);
+                    ordered_crossover(selected[i+1], selected[i], offspring[i+1], dimension);
+                }
+                
+                
             } else {
                 copy_individual(offspring[i], selected[i], dimension);
             }
         }
 
         // Mutation
-        for (int i = 0; i < POPULATION_SIZE; i++) swap_mutation(offspring[i], dimension);
+        for (int i = 0; i < POPULATION_SIZE; i++) swap_mutation(offspring[i], dimension,MUTATION_RATE);
 
         // Remplacer population par offspring
         for (int i = 0; i < POPULATION_SIZE; i++)
