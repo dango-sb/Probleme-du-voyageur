@@ -213,7 +213,7 @@ void tournament_selection(int** population, int* fitness_values, int** selected,
 
 int main(int argc, char* argv[]) {
 
-    if(argc <6) {
+    if(argc < 6 || argc > 8) {
         printf("Usage: %s -f fichier.tsp -m ga/gadxp (default ou (population_size generations mutation_rate)\n", argv[0]);
         exit(0);
     }
@@ -222,10 +222,13 @@ int main(int argc, char* argv[]) {
     double MUTATION_RATE = 0.10;
     bool dxp;
    //Choix dxp ou ordered 
-   if (strcmp(argv[4], "-ga") == 0) {
+   if (strcmp(argv[4], "ga") == 0) {
         dxp=false;
-    }else{
+    }else if (strcmp(argv[4], "gadxp") == 0){
         dxp=true;
+    }else{
+        printf("Choix methode invalide.\n");
+        exit(1);
     }
     //si choix de population_size generations et mutation_rate
     if(argc==8){
@@ -339,9 +342,9 @@ int main(int argc, char* argv[]) {
 
     printf("Tour ; ");
     printf("%s ; ", argv[2]);
-    printf("ga ; ");
+    printf("%s ; ", argv[4]);
     printf("%d ; ", final_distance);
-    printf("0.0");
+    printf("0.0; ");
 
     printf("[");
     for (int i = 0; i < dimension; i++) {

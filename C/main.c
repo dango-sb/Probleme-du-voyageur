@@ -4,9 +4,14 @@
 #include <string.h>
 int main(int argc, char *argv[])
 {
-    if (argc != 4 && argc != 5) {
-        printf("Usage: %s -f fichier.tsp [-c | -m [bf, nn, rw, 2optrw, 2optnn, ga]]\n", argv[0]);
-        exit(1);
+    if (argc < 4 || argc > 8) {
+        printf("Usage: %s -f fichier.tsp (-c | -m METHOD)\n"
+            "\n"
+            "METHOD:\n"
+            "  bf | nn | rw | 2optrw | 2optnn\n"
+            "  ga | gadxp [default | <population_size generations mutation_rate>]\n",
+            argv[0]);    
+       exit(1);
     }
     
 
@@ -29,17 +34,23 @@ int main(int argc, char *argv[])
             execvp(args[0], args);
             exit(0);
         }
-
-        else if (strcmp(argv[4], "ga") == 0 )
+    } 
+    
+    else if ((argc == 6 || argc == 8) && (strcmp(argv[4], "ga") == 0 || strcmp(argv[4], "gadxp")==0))
         {
-            char* args[] = {"../exec/main3", argv[1], argv[2], argv[3], argv[4], NULL};   //tsp_tri_light
+            char* args[] = {"../exec/main3", argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7], NULL};   //tsp_tri_light
             execvp(args[0], args);
             exit(0);
         }
-    }    
+       
     else 
     {
-        printf("Erreur argument\n");
-        exit(1);
+        printf("Usage: %s -f fichier.tsp (-c | -m METHOD)\n"
+            "\n"
+            "METHOD:\n"
+            "  bf | nn | rw | 2optrw | 2optnn\n"
+            "  ga | gadxp [default | <population_size generations mutation_rate>]\n",
+            argv[0]);    
+       exit(1);
     }
 }
